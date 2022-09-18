@@ -1,69 +1,45 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './home.css'
-import reactImage from './assets/react.png'
-import angularImage from './assets/angular.png'
-import vueImage from './assets/vue.png'
-import clockImage from './assets/clock.svg'
-import favoriteImage from './assets/favorite.svg'
+import reactImage from '../assets/react.png'
+import angularImage from '../assets/angular.png'
+import vueImage from '../assets/vue.png'
+import clockImage from '../assets/clock.svg'
+import favoriteImage from '../assets/favorite.svg'
+import { useHit } from '../hooks/fetchAllHits'
 
-interface IHits {
-  readonly author: string
-  readonly comment_text: string
-  readonly created_at: '2022-09-17T09:19:27.000Z'
-  readonly created_at_i: 1663406367
-  readonly num_comments?: string
-  readonly objectID: '32876047'
-  readonly parent_id: 32874213
-  readonly points?: string
-  readonly story_id: 32874086
-  readonly story_text?: string
-  readonly story_title: string
-  readonly story_url: string
-  readonly title?: string
-  readonly url?: string
+interface IPagination {
+  readonly page: number
+  readonly totalPages?: number
 }
 
 function Home() {
-  const [data, setData] = useState<IHits[]>([])
   const [technology, setTechnology] = useState<string>('reactjs')
-  const [page, setPage] = useState<number>(0)
+  const [pagination, setPagination] = useState<IPagination>({
+    page: 0,
+    totalPages: 0,
+  })
+  const [currentPage, setCurrentPage] = useState(1)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?query=${technology}&page=${page}`)
-        // console.log('testing', await res.json())
-        // hitsPerPage: 20
-        // nbHits: 5867
-        // nbPages: 50
-        // page: 0
-        const { hits } = await res.json()
-        // console.log('hits', hits)
-        setData(hits)
-      } catch (err: unknown) {
-        console.error({ err })
-      }
-    }
-
-    fetchData()
-  }, [technology, page])
+  // const [page, setPage] = useState<number>(0)
+  // const [pageLength, setPageLength] = useState<number>(1)
+  const { data } = useHit(technology, pagination.page)
 
   const handleFilterByTechnology = (): void => {
-    const selectText = document.querySelector('.select-text')
-    const options = Array.from(document.getElementsByClassName('options'))
-    const list = document.querySelector('.list')
-    const arrowIcon = document.getElementById('arrow-icon')
+    const selectText: Element = document.querySelector('.select-text') as Element
+    const options: Element[] = Array.from(document.getElementsByClassName('options')) as Element[]
+    const list: Element = document.querySelector('.list') as Element
+    const arrowIcon: Element = document.getElementById('arrow-icon') as Element
 
-    list?.classList.toggle('hide')
-    arrowIcon?.classList.toggle('rotate')
+    list.classList.toggle('hide')
+    arrowIcon.classList.toggle('rotate')
 
     options.forEach((option) => {
       option.addEventListener('click', () => {
         if (option.textContent) {
-          selectText!.innerHTML = option.textContent
-          list?.classList.toggle('hide')
-          arrowIcon?.classList.toggle('rotate')
+          selectText.innerHTML = option.textContent
+          list.classList.toggle('hide')
+          arrowIcon.classList.toggle('rotate')
 
           setTechnology(option.textContent.toLocaleLowerCase())
         }
@@ -73,7 +49,7 @@ function Home() {
 
   const handlePagination = (event: any) => {
     console.log('event', event.target.innerHTML)
-    setPage(+event.target.innerHTML)
+    setPagination({ page: Number(event.target.innerHTML) })
 
     //console.log(event)
   }
@@ -114,7 +90,7 @@ function Home() {
       </div>
 
       <section className='grid-cards'>
-        {data.map((hit, index) => {
+        {data?.hits.map((hit, index) => {
           return (
             <div className='grid-cards-inner' key={index}>
               <div className='card-body'>
@@ -191,7 +167,7 @@ function Home() {
       </div> */}
       <section className='pagination'>
         <ul onClick={handlePagination}>
-          <li className='btn-prev'>
+          {/* <li className='btn-prev'>
             <i className='fa fa-angle-left'></i>
           </li>
           <li className='numb'>1</li>
@@ -204,7 +180,7 @@ function Home() {
           <li className='numb'>21</li>
           <li className='btn-next'>
             <i className='fa fa-angle-right'></i>
-          </li>
+          </li> */}
         </ul>
       </section>
     </section>
