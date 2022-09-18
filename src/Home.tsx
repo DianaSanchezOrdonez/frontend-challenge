@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link, Router } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './home.css'
 import reactImage from './assets/react.png'
 import angularImage from './assets/angular.png'
@@ -26,22 +26,32 @@ interface IHits {
 
 function Home() {
   const [data, setData] = useState<IHits[]>([])
+  const [technology, setTechnology] = useState<string>('reactjs')
+  const [page, setPage] = useState<number>(0)
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('https://hn.algolia.com/api/v1/search_by_date?query=reactjs&page=0')
-      const { hits } = await res.json()
-      console.log('hits', hits)
-      setData(hits)
+      try {
+        const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?query=${technology}&page=${page}`)
+        // console.log('testing', await res.json())
+        // hitsPerPage: 20
+        // nbHits: 5867
+        // nbPages: 50
+        // page: 0
+        const { hits } = await res.json()
+        // console.log('hits', hits)
+        setData(hits)
+      } catch (err: unknown) {
+        console.error({ err })
+      }
     }
 
     fetchData()
-  }, [])
+  }, [technology, page])
 
-  const optionSelected = () => {
-    console.log('hello...')
+  const handleFilterByTechnology = (): void => {
     const selectText = document.querySelector('.select-text')
-    const options: Element[] = Array.from(document.getElementsByClassName('options'))
+    const options = Array.from(document.getElementsByClassName('options'))
     const list = document.querySelector('.list')
     const arrowIcon = document.getElementById('arrow-icon')
 
@@ -49,16 +59,27 @@ function Home() {
     arrowIcon?.classList.toggle('rotate')
 
     options.forEach((option) => {
-      option.addEventListener('click', (e) => {
-        console.log('👁 ', e)
-        // list?.classList.toggle('hide')
-        // arrowIcon?.classList.toggle('rotate')
+      option.addEventListener('click', () => {
+        if (option.textContent) {
+          selectText!.innerHTML = option.textContent
+          list?.classList.toggle('hide')
+          arrowIcon?.classList.toggle('rotate')
+
+          setTechnology(option.textContent.toLocaleLowerCase())
+        }
       })
     })
   }
 
+  const handlePagination = (event: any) => {
+    console.log('event', event.target.innerHTML)
+    setPage(+event.target.innerHTML)
+
+    //console.log(event)
+  }
+
   return (
-    <div className='container'>
+    <section className='container'>
       <header className='header'>
         <h1>hacker news</h1>
       </header>
@@ -70,7 +91,7 @@ function Home() {
         <Link to='/favorites'>My faves</Link>
       </div>
 
-      <div className='selector' onClick={optionSelected}>
+      <div className='selector' onClick={handleFilterByTechnology}>
         <div>
           <p className='select-text'>Select your news</p>
           <i className='fa fa-chevron-down' id='arrow-icon'></i>
@@ -92,7 +113,7 @@ function Home() {
         </ul>
       </div>
 
-      <div className='grid-cards'>
+      <section className='grid-cards'>
         {data.map((hit, index) => {
           return (
             <div className='grid-cards-inner' key={index}>
@@ -109,24 +130,7 @@ function Home() {
             </div>
           )
         })}
-        {/* {data.map((el) => {
-          ;<div className='grid-cards-inner'>
-            <div className='card-body'>
-              <div>
-                <img src={clockImage} alt='clock' />
-                <span>3 hours ago by author</span>
-              </div>
-              <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Placeat distinctio dolor, nisi laborum quos
-                odio unde consectetur asperiores odit omnis!
-              </p>
-            </div>
-            <div className='action-fav'>
-              <input type='image' src={favoriteImage} alt='submit'></input>
-            </div>
-          </div>
-        })} */}
-      </div>
+      </section>
       {/* <main className='content'>
         <div className='filter'>
           <button className='all'>All</button>
@@ -185,8 +189,25 @@ function Home() {
           </div>
         </div>
       </div> */}
-      <div className='pagination'></div>
-    </div>
+      <section className='pagination'>
+        <ul onClick={handlePagination}>
+          <li className='btn-prev'>
+            <i className='fa fa-angle-left'></i>
+          </li>
+          <li className='numb'>1</li>
+          <li className='numb'>2</li>
+          <li className='numb active'>3</li>
+          <li className='numb'>4</li>
+          <li className='numb'>5</li>
+          <li className='numb'>6</li>
+          <li className='dots'>...</li>
+          <li className='numb'>21</li>
+          <li className='btn-next'>
+            <i className='fa fa-angle-right'></i>
+          </li>
+        </ul>
+      </section>
+    </section>
   )
 }
 
