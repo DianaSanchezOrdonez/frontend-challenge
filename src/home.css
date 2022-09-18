@@ -1,0 +1,245 @@
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding-bottom: 50px;
+}
+
+.header {
+  box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
+  background-image: linear-gradient(to bottom, #ececec, #fff);
+  padding: 2.75rem 0 2.75rem 0;
+  margin: 0 0 4rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  line-height: 1.75rem;
+  color: #3b3b3b;
+  font-family: 'Libre Baskerville', serif;
+  text-transform: uppercase;
+}
+
+/* FILTER BY ALL OR FAVORITES SECTION */
+.filter {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 4rem;
+}
+
+.filter > a {
+  width: 7rem;
+  height: 2rem;
+  border-radius: 2px;
+  border: solid 1px #d6d6d6;
+  font-size: 1rem;
+  line-height: 1.75;
+  letter-spacing: normal;
+  text-align: center;
+  background-color: #fcfcfc;
+  color: #606060;
+  text-decoration: none;
+  font-family: 'Roboto', serif;
+}
+
+.filter > .selected {
+  border: solid 1px #1797ff;
+  color: #1797ff;
+  font-weight: 500;
+}
+
+/* FILTER BY STACK SECTION */
+.selector {
+  width: 15rem;
+  height: 2rem;
+  padding: 0.5rem 0;
+  border-radius: 4px;
+  border: solid 1px #2e2e2e;
+  background-color: #fff;
+  margin-bottom: 2.375rem;
+  /* padding: 15px 20px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 6px; */
+  /* display: flex;
+  justify-content: space-between; */
+  cursor: pointer;
+  font-family: 'Roboto', serif;
+  font-size: 0.875rem;
+  color: #343434;
+}
+
+.selector > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+  margin-bottom: 10px;
+}
+
+.selector > div > i {
+  width: 12px;
+  transition: transform 0.5s;
+}
+
+.list {
+  width: 15rem;
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.options {
+  width: 80%;
+  padding: 15px;
+  list-style: none;
+  cursor: pointer;
+  /* position: relative; */
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.options img {
+  width: 25px;
+  margin: 0 0.5rem 0 0;
+  /* position: absolute;
+  top: 12px;
+  left: 25px; */
+}
+
+.options:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+/* CARDS SECTION */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+.grid-cards-inner {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Roboto', serif;
+  border: 1px solid #979797;
+  background-color: #fcfcfc;
+  border-radius: 6px;
+}
+
+.grid-cards-inner .card-body {
+  padding: 1rem 1.625rem;
+}
+
+.card-body > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.438rem;
+}
+
+.card-body > div > span {
+  font-size: 0.7rem;
+  color: #767676;
+  margin-left: 0.5rem;
+}
+
+.card-body > p {
+  font-size: 0.875rem;
+  color: #6b6b6b;
+  letter-spacing: 0.25px;
+  font-weight: 500;
+}
+
+.action-fav {
+  width: 4.25rem;
+  height: auto;
+  border-radius: 0 6px 6px 0;
+  margin: 0 0 0 1rem;
+  padding: 2.188rem 1.375rem 2.063rem;
+  background-color: #ececec;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+/* .action-fav input[type=image]:focus {
+  background-color: #dd0031  ;
+} */
+
+/* .filter-stack > select {
+  width: 15rem;
+  height: 2rem;
+  padding: 0.313rem 0.75rem 0.313rem 0.75rem;
+  border-radius: 4px;
+  border: solid 1px #2e2e2e;
+  background-color: #fff;
+  font-size: 0.875rem;
+  color: #343434;
+}
+
+.container > .cards-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.cards-content > .card {
+  width: 26rem;
+  height: 6rem;
+  margin: 1rem 0;
+  opacity: 0.8;
+  border-radius: 6px;
+  border: solid 1px #979797;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body {
+  padding: 1rem 1.625rem;
+}
+
+.card > .card-body div {
+  display: flex;
+  font-size: 0.688rem;
+  color: #767676;
+  align-items: center;
+  margin: 0 0 0.375rem 0;
+}
+
+.card-body div > img {
+  margin: 0 0.5rem 0 0;
+}
+
+.card-body > p {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b6b6b;
+  line-height: 1.43;
+}
+
+.card-action {
+  width: 4.25rem;
+  height: 1.7rem;
+  margin: 0 0 0 1rem;
+  padding: 2.188rem 1.375rem 2.063rem;
+  border-radius: 0 6px 6px 0;
+  background-color: #ececec;
+  display: flex;
+  justify-content: center;
+}
+
+.card-action > img:focus {
+  outline: 2px solid blue;
+} */
