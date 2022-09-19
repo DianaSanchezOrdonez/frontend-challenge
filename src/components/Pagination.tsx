@@ -1,16 +1,9 @@
-const Pagination = (props: {
-  totalPages: number
-  currentPage: number
-  maxPageLimit: number
-  minPageLimit: number
-  onPrevClick: any
-  onNextClick: any
-  onPageChange: any
-}) => {
+import { PaginationProps } from '../interfaces/paginationProps'
+
+const Pagination = (props: PaginationProps) => {
   const { currentPage, maxPageLimit, minPageLimit } = props
   const totalPages = props.totalPages - 1
 
-  // build page numbers list based on total number of pages
   const pages = []
   for (let i = 1; i <= totalPages; i++) {
     pages.push(i)
@@ -45,7 +38,6 @@ const Pagination = (props: {
     }
   })
 
-  // page ellipses
   let pageIncrementEllipses = null
   if (pages.length > maxPageLimit) {
     pageIncrementEllipses = <li onClick={handleNextClick}>&hellip;</li>
@@ -58,34 +50,16 @@ const Pagination = (props: {
   return (
     <section className='pagination'>
       <ul>
-        <li className='btn-prev' onClick={handlePrevClick}>
+        <li className={currentPage === pages[0] ? 'disable' : ''} onClick={handlePrevClick}>
           <i className='fa fa-angle-left'></i>
         </li>
         {pageDecremenEllipses}
         {pageNumbers}
         {pageIncrementEllipses}
-        <li className='btn-next' onClick={handleNextClick}>
+        <li className={currentPage === pages[pages.length - 1] ? 'disable' : ''} onClick={handleNextClick}>
           <i className='fa fa-angle-right'></i>
         </li>
       </ul>
-
-      {/* <div className='main'>
-        <ul className='pageNumbers'>
-          <li>
-            <button onClick={handlePrevClick} disabled={currentPage === pages[0]}>
-              Prev
-            </button>
-          </li>
-          {pageDecremenEllipses}
-          {pageNumbers}
-          {pageIncrementEllipses}
-          <li>
-            <button onClick={handleNextClick} disabled={currentPage === pages[pages.length - 1]}>
-              Next
-            </button>
-          </li>
-        </ul>
-      </div> */}
     </section>
   )
 }
