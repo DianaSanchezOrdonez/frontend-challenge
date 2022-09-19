@@ -1,6 +1,6 @@
 # CHALLENGE FRONT END DEVELOPER
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project has been deployed with the following url: https://cheery-marzipan-6a48d8.netlify.app/ 
 
 ## STACK
 - Library [React](https://reactjs.org/)
@@ -24,3 +24,4 @@ one: https://material-ui.com/components/pagination/
 - Clicking on the “like button” should not trigger the opening of the post URL link
 - When hovering on the row, apply opacity to the entire row and its children (texts,
 icons, like button, etc)
+

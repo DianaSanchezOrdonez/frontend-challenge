@@ -1,8 +1,9 @@
 import reactImage from '../assets/react.png'
 import angularImage from '../assets/angular.png'
 import vueImage from '../assets/vue.png'
+import { TechnologyFilterProps } from '../interfaces/technologyFilterProps'
 
-const TechnologyFilter = (props: { onTechnologyChange: any }) => {
+const TechnologyFilter = (props: TechnologyFilterProps) => {
   const handleTechologyFilter = () => {
     props.onTechnologyChange()
   }

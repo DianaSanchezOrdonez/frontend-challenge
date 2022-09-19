@@ -48,7 +48,7 @@ function Favorite() {
           <span>No hay data</span>
         )}
       </div>
-      <div className='pagination'></div>
+    
     </section>
   )
 }

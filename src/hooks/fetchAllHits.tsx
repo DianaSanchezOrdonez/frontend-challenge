@@ -7,7 +7,9 @@ export const useHit = (technology: string, page: number) => {
 
   useEffect(() => {
     // loading data
-    fetchAllHits(technology, page).then((data) => setData(data))
+    fetchAllHits(technology, page)
+      .then((data) => setData(data))
+      .catch((error: unknown) => console.error({ error }))
   }, [technology, page])
 
   return {
