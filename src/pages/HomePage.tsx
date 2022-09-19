@@ -5,25 +5,19 @@ import reactImage from '../assets/react.png'
 import angularImage from '../assets/angular.png'
 import vueImage from '../assets/vue.png'
 import clockImage from '../assets/clock.svg'
-import favoriteImage from '../assets/favorite.svg'
 import { useHit } from '../hooks/fetchAllHits'
-
-interface IPagination {
-  readonly page: number
-  readonly totalPages?: number
-}
+import Pagination from '../components/Pagination'
 
 function Home() {
   const [technology, setTechnology] = useState<string>('reactjs')
-  const [pagination, setPagination] = useState<IPagination>({
-    page: 0,
-    totalPages: 0,
-  })
-  const [currentPage, setCurrentPage] = useState(1)
+  const [favorites, setFavorites] = useState<string[]>([])
 
-  // const [page, setPage] = useState<number>(0)
-  // const [pageLength, setPageLength] = useState<number>(1)
-  const { data } = useHit(technology, pagination.page)
+  const pageNumberLimit: number = 10
+  const [currentPage, setCurrentPage] = useState<number>(0)
+  const [maxPageLimit, setMaxPageLimit] = useState<number>(10)
+  const [minPageLimit, setMinPageLimit] = useState<number>(0)
+
+  const { data } = useHit(technology, currentPage)
 
   const handleFilterByTechnology = (): void => {
     const selectText: Element = document.querySelector('.select-text') as Element
@@ -47,11 +41,50 @@ function Home() {
     })
   }
 
-  const handlePagination = (event: any) => {
-    console.log('event', event.target.innerHTML)
-    setPagination({ page: Number(event.target.innerHTML) })
+  const handleFavorites = (id: string) => {
+    //localStorage.setItem('Favorites', hit.objectID)
+    let arrayFavoriteIds = favorites
+    let addFavorite = true
 
-    //console.log(event)
+    arrayFavoriteIds.map((item, index) => {
+      if (item === id) {
+        arrayFavoriteIds.splice(index, 1)
+        addFavorite = false
+      }
+    })
+
+    if (addFavorite) {
+      arrayFavoriteIds.push(id)
+    }
+
+    setFavorites([...arrayFavoriteIds])
+  }
+
+  const onPageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
+  }
+
+  const onPrevClick = () => {
+    if ((currentPage - 1) % pageNumberLimit === 0) {
+      setMaxPageLimit(maxPageLimit - pageNumberLimit)
+      setMinPageLimit(minPageLimit - pageNumberLimit)
+    }
+    setCurrentPage((prev) => prev - 1)
+  }
+
+  const onNextClick = () => {
+    if (currentPage + 1 > maxPageLimit) {
+      setMaxPageLimit(maxPageLimit + pageNumberLimit)
+      setMinPageLimit(minPageLimit + pageNumberLimit)
+    }
+    setCurrentPage((prev) => prev + 1)
+  }
+
+  const paginationAttributes = {
+    currentPage,
+    maxPageLimit,
+    minPageLimit,
+    totalPages: data?.nbPages ?? 20,
   }
 
   return (
@@ -92,7 +125,12 @@ function Home() {
       <section className='grid-cards'>
         {data?.hits.map((hit, index) => {
           return (
-            <div className='grid-cards-inner' key={index}>
+            <div
+              className='grid-cards-inner'
+              key={index}
+              id={hit.objectID}
+              onClick={() => handleFavorites(hit.objectID)}
+            >
               <div className='card-body'>
                 <div>
                   <img src={clockImage} alt='clock' />
@@ -101,88 +139,37 @@ function Home() {
                 <p>{hit.story_title}</p>
               </div>
               <div className='action-fav'>
-                <input type='image' src={favoriteImage} alt='submit'></input>
+                {favorites.includes(hit.objectID) ? (
+                  <button>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22'>
+                      <path
+                        fill='#DD0031'
+                        d='M12 3.248C8.852-2.154 0-.577 0 6.192 0 10.853 5.571 15.619 12 22c6.43-6.381 12-11.147 12-15.808C24-.6 15.125-2.114 12 3.248z'
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <button>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22'>
+                      <path
+                        fill='#DD0031'
+                        d='M12 8.229C12.234 7.109 13.547 2 17.382 2 19.602 2 22 3.551 22 7.003c0 3.907-3.627 8.47-10 12.629C5.627 15.473 2 10.91 2 7.003c0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zM0 7.003C0 11.071 3.06 16.484 12 22c8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737C9.662-1.996 0-1.004 0 7.003z'
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
           )
         })}
       </section>
-      {/* <main className='content'>
-        <div className='filter'>
-          <button className='all'>All</button>
-          <button className='favorites'>My faves</button>
-        </div>
-        <div className='filter-stack'>
-          <select>
-            <option>Select your news</option>
-            <option>Angular</option>
-            <option>
-              <img src={reactImage} alt='reactjs' />
-              Reactjs
-            </option>
-            <option>
-              <img src={reactImage} alt='reactjs' />
-              Vuejs
-            </option>
-          </select>
-        </div>
-      </main> */}
-      {/* <div className='cards-content'>
-        <div className='card'>
-          <div className='card-body'>
-            <div>
-              <img src={clockImage} alt='clock' />
-              <p>3 hours ago by author</p>
-            </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, assumenda.</p>
-          </div>
-          <div className='card-action'>
-            <img src={favoriteImage} alt='heart' />
-          </div>
-        </div>
-        <div className='card'>
-          <div className='card-body'>
-            <div>
-              <img src={clockImage} alt='clock' />
-              <p>3 hours ago by author</p>
-            </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, assumenda.</p>
-          </div>
-          <div className='card-action'>
-            <img src={favoriteImage} alt='heart' />
-          </div>
-        </div>
-        <div className='card'>
-          <div className='card-body'>
-            <div>
-              <img src={clockImage} alt='clock' />
-              <p>3 hours ago by author</p>
-            </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, assumenda.</p>
-          </div>
-          <div className='card-action'>
-            <img src={favoriteImage} alt='heart' />
-          </div>
-        </div>
-      </div> */}
-      <section className='pagination'>
-        <ul onClick={handlePagination}>
-          {/* <li className='btn-prev'>
-            <i className='fa fa-angle-left'></i>
-          </li>
-          <li className='numb'>1</li>
-          <li className='numb'>2</li>
-          <li className='numb active'>3</li>
-          <li className='numb'>4</li>
-          <li className='numb'>5</li>
-          <li className='numb'>6</li>
-          <li className='dots'>...</li>
-          <li className='numb'>21</li>
-          <li className='btn-next'>
-            <i className='fa fa-angle-right'></i>
-          </li> */}
-        </ul>
-      </section>
+
+      <Pagination
+        {...paginationAttributes}
+        onPrevClick={onPrevClick}
+        onNextClick={onNextClick}
+        onPageChange={onPageChange}
+      />
     </section>
   )
 }
