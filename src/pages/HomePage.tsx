@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './home.css'
-import reactImage from '../assets/react.png'
-import angularImage from '../assets/angular.png'
-import vueImage from '../assets/vue.png'
 import clockImage from '../assets/clock.svg'
 import { useHit } from '../hooks/fetchAllHits'
 import Pagination from '../components/Pagination'
+import { Hit } from '../interfaces/fetchAllHitsResponse'
+import TechnologyFilter from '../components/TechnologyFilter'
 
 function Home() {
   const [technology, setTechnology] = useState<string>('reactjs')
-  const [favorites, setFavorites] = useState<string[]>([])
+  const [favorites, setFavorites] = useState<Hit[]>([])
 
   const pageNumberLimit: number = 10
   const [currentPage, setCurrentPage] = useState<number>(0)
@@ -19,7 +18,7 @@ function Home() {
 
   const { data } = useHit(technology, currentPage)
 
-  const handleFilterByTechnology = (): void => {
+  const onTechnologyChange = (): void => {
     const selectText: Element = document.querySelector('.select-text') as Element
     const options: Element[] = Array.from(document.getElementsByClassName('options')) as Element[]
     const list: Element = document.querySelector('.list') as Element
@@ -41,23 +40,23 @@ function Home() {
     })
   }
 
-  const handleFavorites = (id: string) => {
-    //localStorage.setItem('Favorites', hit.objectID)
+  const handleFavorites = (hit: Hit) => {
     let arrayFavoriteIds = favorites
     let addFavorite = true
 
     arrayFavoriteIds.map((item, index) => {
-      if (item === id) {
+      if (item.objectID === hit.objectID) {
         arrayFavoriteIds.splice(index, 1)
         addFavorite = false
       }
     })
 
     if (addFavorite) {
-      arrayFavoriteIds.push(id)
+      arrayFavoriteIds.push(hit)
     }
 
     setFavorites([...arrayFavoriteIds])
+    localStorage.setItem('favorites', JSON.stringify(favorites))
   }
 
   const onPageChange = (pageNumber: number) => {
@@ -100,37 +99,12 @@ function Home() {
         <Link to='/favorites'>My faves</Link>
       </div>
 
-      <div className='selector' onClick={handleFilterByTechnology}>
-        <div>
-          <p className='select-text'>Select your news</p>
-          <i className='fa fa-chevron-down' id='arrow-icon'></i>
-        </div>
-
-        <ul className='list hide'>
-          <li className='options'>
-            <img src={angularImage} alt='angular' />
-            <p>Angular</p>
-          </li>
-          <li className='options'>
-            <img src={reactImage} alt='reactjs' />
-            <p>Reactjs</p>
-          </li>
-          <li className='options'>
-            <img src={vueImage} alt='reactjs' />
-            <p>Vuejs</p>
-          </li>
-        </ul>
-      </div>
+      <TechnologyFilter onTechnologyChange={onTechnologyChange} />
 
       <section className='grid-cards'>
         {data?.hits.map((hit, index) => {
           return (
-            <div
-              className='grid-cards-inner'
-              key={index}
-              id={hit.objectID}
-              onClick={() => handleFavorites(hit.objectID)}
-            >
+            <div className='grid-cards-inner' key={index} id={hit.objectID} onClick={() => handleFavorites(hit)}>
               <div className='card-body'>
                 <div>
                   <img src={clockImage} alt='clock' />
@@ -139,7 +113,7 @@ function Home() {
                 <p>{hit.story_title}</p>
               </div>
               <div className='action-fav'>
-                {favorites.includes(hit.objectID) ? (
+                {favorites.includes(hit) ? (
                   <button>
                     <svg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22'>
                       <path
