@@ -171,6 +171,11 @@
   align-items: center;
 }
 
+.action-fav > button {
+  border: none;
+  cursor: pointer;
+}
+
 /* PAGINATION SECTION */
 .pagination {
   display: flex;
