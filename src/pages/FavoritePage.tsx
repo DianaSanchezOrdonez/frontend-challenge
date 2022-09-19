@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
 import './home.css'
 import clockImage from '../assets/clock.svg'
-import favoriteImage from '../assets/favorite.svg'
 import { Link } from 'react-router-dom'
+import { useFavoriteHits } from '../hooks/fetchFavoritesHits'
 
 function Favorite() {
+  const { favoriteData } = useFavoriteHits()
+
   return (
     <section className='container'>
       <header className='header'>
@@ -19,22 +20,33 @@ function Favorite() {
       </div>
 
       <div className='grid-cards'>
-        {/* {data.map((hit, index) => {
-          return (
-            <div className='grid-cards-inner' key={index}>
-              <div className='card-body'>
-                <div>
-                  <img src={clockImage} alt='clock' />
-                  <span>3 hours ago by {hit.author}</span>
+        {favoriteData?.length ? (
+          favoriteData.map((hit, index) => {
+            return (
+              <div className='grid-cards-inner' key={index}>
+                <div className='card-body'>
+                  <div>
+                    <img src={clockImage} alt='clock' />
+                    <span>3 hours ago by {hit.author}</span>
+                  </div>
+                  <p>{hit.story_title}</p>
                 </div>
-                <p>{hit.story_title}</p>
+                <div className='action-fav'>
+                  <button>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22'>
+                      <path
+                        fill='#DD0031'
+                        d='M12 3.248C8.852-2.154 0-.577 0 6.192 0 10.853 5.571 15.619 12 22c6.43-6.381 12-11.147 12-15.808C24-.6 15.125-2.114 12 3.248z'
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div className='action-fav'>
-                <input type='image' src={favoriteImage} alt='submit'></input>
-              </div>
-            </div>
-          )
-        })} */}
+            )
+          })
+        ) : (
+          <span>No hay data</span>
+        )}
       </div>
       <div className='pagination'></div>
     </section>
