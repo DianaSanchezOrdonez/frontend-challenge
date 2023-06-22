@@ -1,0 +1,23 @@
+name: Edit File
+on:
+  push:
+    branches:
+      - 'github-actions'
+jobs:
+  edit-file:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      
+    - name: Edit File
+      run: |
+        # Edit the file using desired commands (e.g., sed, awk, etc.)
+        sed -i 's/old_content/new_content/g' public/.well-known/apple-app-site-association
+        
+    - name: Commit Changes
+      run: |
+        git config --local user.name "DianaSanchezOrdonez" 
+        git config --local user.email "dianaordonez1998@gmail.com"
+        git add public/.well-known/apple-app-site-association
+        git commit -m "Update file"
+        git push
