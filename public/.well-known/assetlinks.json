@@ -1,0 +1,32 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.crmb.android_cl6dx7o1x00290ns65yg3761v_lanis_hawaiian_style_shave_ice",
+      "sha256_cert_fingerprints": [
+        "F2:3B:22:A6:CC:10:C8:61:5D:53:12:BA:3C:E1:3A:E2:A2:14:D9:28:F4:BE:0A:1A:BA:B1:17:AB:78:22:7E:FF"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.crmb.android_cl6vlg26q00680ns6gt2lwh31_dippys",
+      "sha256_cert_fingerprints": [
+        "D6:A9:BF:9F:1D:12:E8:CB:A3:65:14:2E:0D:B7:47:CA:26:54:7D:1B:96:C9:A2:DB:47:FB:F4:67:45:5F:55:B3"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.crmb.android_cl9ocir0s02150ns6wog2uay8_tropical_sno",
+      "sha256_cert_fingerprints": [
+        "DF:1D:8F:3A:A2:90:FD:D1:36:E3:15:5F:4D:C8:7A:36:A3:EB:3E:9A:E3:59:B6:3D:74:49:C1:46:0A:C5:0F:F6"
+      ]
+    }
+  }
+]
